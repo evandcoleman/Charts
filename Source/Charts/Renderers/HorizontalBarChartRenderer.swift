@@ -191,7 +191,7 @@ open class HorizontalBarChartRenderer: BarChartRenderer
         let borderWidth = dataSet.barBorderWidth
         let borderColor = dataSet.barBorderColor
         let drawBorder = borderWidth > 0.0
-        
+
         context.saveGState()
         
         // draw the bar shadow before the values
@@ -226,9 +226,8 @@ open class HorizontalBarChartRenderer: BarChartRenderer
                 
                 _barShadowRectBuffer.origin.x = viewPortHandler.contentLeft
                 _barShadowRectBuffer.size.width = viewPortHandler.contentWidth
-                
-                context.setFillColor(dataSet.barShadowColor.cgColor)
-                context.fill(_barShadowRectBuffer)
+
+                renderShadow(with: dataSet.barShadowColor, for: _barShadowRectBuffer, in: context, dataSet: dataSet, entry: e)
             }
         }
         
@@ -258,20 +257,21 @@ open class HorizontalBarChartRenderer: BarChartRenderer
             {
                 continue
             }
-            
-            if !isSingleColor
-            {
-                // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
-                context.setFillColor(dataSet.color(atIndex: j).cgColor)
-            }
 
-            context.fill(barRect)
+            renderFill(with: dataSet.color(atIndex: isSingleColor ? 0 : j),
+                       for: barRect,
+                       in: context,
+                       dataSet: dataSet,
+                       entry: dataSet.entryForIndex(j) as? BarChartDataEntry)
 
             if drawBorder
             {
-                context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(borderWidth)
-                context.stroke(barRect)
+                renderBorder(with: borderColor,
+                             width: borderWidth,
+                             for: barRect,
+                             in: context,
+                             dataSet: dataSet,
+                             entry: dataSet.entryForIndex(j) as? BarChartDataEntry)
             }
 
             // Create and append the corresponding accessibility element to accessibilityOrderedElements (see BarChartRenderer)
