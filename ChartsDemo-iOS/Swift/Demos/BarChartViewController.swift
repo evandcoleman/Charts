@@ -24,9 +24,6 @@ class BarChartViewController: DemoBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        chartView.barSettings = .init(rectCorner: [.topLeft, .topRight],
-                                      cornerRadii: CGSize(width: 4, height: 4))
 
         // Do any additional setup after loading the view.
         self.title = "Bar Chart"
